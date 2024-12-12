@@ -1,0 +1,93 @@
+{% extends "admin/base_admin.html" %}
+{%load static%}
+{%block detail_admin%}
+<!--  CSS -->
+{% comment %} <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> {% endcomment %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<link rel="stylesheet" href="{%static 'css/comment.css'%}">
+<!--  JS -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="{%static 'js/detailll.js' %}"></script>
+<style>
+    .block-button{
+        display:flex;
+        padding:0px !important;
+    }
+    .block-button button{
+        margin-right:-10px;
+        padding:0;
+    }
+    .title>span{
+        color:#6c757d;
+        font-weight:500;
+    }
+    .card{
+        border:none;
+    }
+	body{
+        background:#eee;
+    }
+</style>
+<div class="container">
+	<div class="card">
+		<div class="container-fliud">
+			<div class="wrapper row" style="background:white; padding:30px;">
+				<div class="preview col-md-5">
+					<div class="preview-pic tab-content">
+						{% for image in images|slice:":4" %}
+						<div class="tab-pane {% if forloop.first %}active{% endif %}" id="pic-{{ forloop.counter }}">
+							<img src="{{ image.image.url }}" style="width: 100%;height: 400px; object-fit:cover;"/>
+						</div>
+					{% endfor %}
+				</div>
+				<ul class="preview-thumbnail nav nav-tabs" style="margin-top: 20px;border: none;">
+					{% for image in images|slice:":4" %}
+						<li class="{% if forloop.first %}active{% endif %}">
+							<a data-target="#pic-{{ forloop.counter }}" data-toggle="tab">
+								<img src="{{ image.image.url }}" style="width: 80px;height: 80px;object-fit:cover;"/>
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+				<div class="details col-md">
+					<h3 class="title-pro" style="color:black; font-size:16pt;font-weight:500; margin-bottom: 5px;">{{recipe.title}}</h3>
+                    <div class="text-muted"><img style="width:15px;height:15px; margin-bottom:4px;" src="{% static 'img/user.png' %}" alt=""> <b style="color:var(--blue);">{{ author_profile.user.last_name }} {{ author_profile.user.first_name }} </b></div>
+                    <div style="color: #6c757d;"><img style="width:15px;height:15px; margin-bottom:4px;" src="{% static 'img/calendar.png' %}" alt=""> {{ recipe.created_at|date:"d/m/Y" }}</div>
+                    <div style="color: #6c757d;" class="review-no"><img style="width:15px;height:15px; margin-bottom:4px;" src="{% static 'img/eye.png' %}" alt=""> {{ recipe.views }} lượt xem</div>
+					<div class="action" style="margin-bottom:10px;margin-top:10px;">
+                        <div class="m-t text-right block-button" style="padding-top: 30px;">
+                            <a href="{% url 'like_recipe' recipe.id %}" class="add-to-cart btn btn-default" type="button" style="background:none; padding:0px;"><img style="width:30px;height:30px; margin-bottom:4px; margin-right:10px;" src="{% static 'img/heartttt.png' %}" alt=""></a>
+                            <form method="post" action="{% url 'report_food' recipe.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger" style="border: none"><img style="width:30px; margin-bottom: 2px;margin-right: 10px;" src="{% static 'img/report.png' %}" alt=""></button>
+                            </form>
+                            {% if not is_own_recipe %}
+                                <form method="post" action="{% if is_following %}{% url 'unfollow_user' recipe.author.id %}{% else %}{% url 'follow_user' recipe.author.id %}{% endif %}">
+                                    {% csrf_token %}
+                                    <button style=" border-radius: 5px;background: none;border: none;" type="submit" class="btn {% if is_following %}btn-danger{% else %}btn-primary{% endif %}">
+                                        {% if is_following %}<img style="width:30px; margin-bottom: 2px; margin-left:12px;" src="{% static 'img/check.png' %}" alt="">
+                                        {% else %} <img style="width:30px; margin-bottom: 2px;margin-left:12px;" src="{% static 'img/follow.png' %}" alt="">
+                                        {% endif %}
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+					</div>
+                    <p class="title" style="margin-bottom:0px;"><span style="margin-right:10px;">Giới thiệu</span> {{recipe.introduce}}</p>
+					<p class="title"><span style="margin-right:15px;">Nội dung</span> {{recipe.description}}</p>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+
+<br><br>
+
+
+
+  {% endblock detail_admin%}

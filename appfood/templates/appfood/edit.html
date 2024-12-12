@@ -1,0 +1,74 @@
+{% extends "appfood/base.html" %}
+{%load static%}
+
+{% block edit %}
+
+{% comment %} <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> {% endcomment %}
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<<link rel="stylesheet" href="{%static 'css/postpage.css' %}">
+<link rel="stylesheet" href="{%static 'css/newpost.css' %}">
+<link rel="stylesheet" href="{%static 'css/main.css' %}">
+<!-- edit_recipe.html -->
+<main>
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        <div class="container">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                            {% if error %}
+                                <div class="alert alert-danger">
+                                    {{ error }}
+                                </div>
+                            {% endif %}
+                            <h3 class="card-title text-center mb-4">CHỈNH SỬA CÔNG THỨC</h3>
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Tiêu đề</label>
+                                <input type="text" id="title" name="title" value="{{ recipe.title }}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="introduce" class="form-label">Giới thiệu</label>
+                                <textarea id="introduce" name="introduce" class="form-control" required>{{ recipe.introduce }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Nội dung</label>
+                                <textarea id="description" name="description" class="form-control" required>{{ recipe.description }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="classify">Danh mục</label>
+                                <br>
+                                <label><input type="radio" id="snacks" name="classify" value="Món Ăn Vặt"> Món Ăn Vặt</label>
+                                <label><input type="radio" id="vegetarian" name="classify" value="Chay"> Chay</label>
+                                <label><input type="radio" id="asian" name="classify" value="Món Á"> Món Á</label>
+                                <label><input type="radio" id="european" name="classify" value="Món Âu"> Món Âu</label>
+                                <label><input type="radio" id="grill" name="classify" value="Nướng"> Nướng</label>
+                                <label><input type="radio" id="appetizer" name="classify" value="Khai Vị"> Khai Vị</label>
+                                <label><input type="radio" id="dessert" name="classify" value="Tráng Miện"> Tráng Miện</label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="images" class="form-label">Thêm ảnh minh họa</label>
+                                <input type="file" id="images" name="images" class="form-control" multiple>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label   class="form-label">Ảnh hiện tại</label>
+                                {% for image in images %}
+                                    <div>
+                                        <img src="{{ image.image.url }}" alt="Recipe Image" width="200">
+                                        <label>
+                                            <input type="checkbox" name="delete_images" value="{{ image.id }}"> Xóa ảnh này
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <button type="submit" class="btn btn-post w-100">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+
+
+{% endblock edit %}

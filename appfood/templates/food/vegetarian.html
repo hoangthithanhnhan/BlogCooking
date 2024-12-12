@@ -1,0 +1,129 @@
+{% extends "appfood/base.html" %}
+{%load static%}
+{%block vegetarian%}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <div class="side-bar d-flex flex-column flex-shrink-0 p-3" style="width: 280px;">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link active" aria-current="page">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Trang chủ
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'postfood' %}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Thêm bài viết
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'home' %}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Thông báo
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'myfood' %}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Quản lý bài viết
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'savefood' %}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Bài viết đã lưu
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'savefood' %}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Người Dùng
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'logout' %}" class="nav-link text-white">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <div class="tags">
+                    <button type="button" class="btn btn-outline-success"onclick="window.location.href='{% url 'vegetarian' %}'" >Món Chay</button>
+                    <button type="button" class="btn btn-outline-success"onclick="window.location.href='{% url 'grill' %}'" >Món Nướng</button>
+                    <button type="button" class="btn btn-outline-success"onclick="window.location.href='{% url 'asian' %}'">Món Châu Á</button>
+                    <button type="button" class="btn btn-outline-success"onclick="window.location.href='{% url 'snacks' %}'">Món Ăn Vặt</button>
+                    <button type="button" class="btn btn-outline-success"onclick="window.location.href='{% url 'dessert' %}'">Món Tráng Miện</button>
+                    <button type="button" class="btn btn-outline-success"onclick="window.location.href='{% url 'appetizer' %}'">Khai Vị</button>
+                    <button type="button" class="btn btn-outline-success"onclick="window.location.href='{% url 'european' %}'">Món Âu</button>
+                </div>
+                {% comment %}  {% endcomment %}
+
+                
+                
+
+    <h2>Các Món Ăn Chay : </h2>
+    
+    <div class="row d-flex flex-wrap">
+        {% for recipe in recipes %}
+            <div class="col-md-4">
+                <div class="ibox" style="padding-top: 20px;">
+                    <div class="ibox-content product-box">
+                        {% if recipe.images.first %}
+                            <div class="product" style="height: 170px;">
+                                <img style="height: 170px;width: 270px;" src="{{ recipe.images.first.image.url }}" alt="">
+                            </div>
+                        {% endif %}
+                        <div class="product-desc">
+                            <small class="text-muted">Đăng bởi: <b>
+                                {% if recipe.author.userprofile %}
+                                    {{ recipe.author.userprofile.user.last_name }} {{ recipe.author.userprofile.user.first_name }} 
+                                {% else %}
+                                    {{ recipe.author.username }}
+                                {% endif %}</b> </small><!-- Hiển thị người đăng -->
+                            <br>
+                            <small class="text-muted">Lược Xem: {{ recipe.views }}</small>
+                            <a href="{% url 'detail' recipe.id %}" class="product-name">{{ recipe.title }}</a>
+                            <small class="text-muted">Đã Có: {{ recipe.total_likes }} Người Thích</small>
+                            <div>
+                                <small class="text-muted">Ngày Đăng: {{recipe.images.first.uploaded_at|date:"d/m/Y"}}</small>
+                            </div>
+                            <div>
+                                <small style="float: left;" class="text-muted">Thể Loại:</small>
+                                {% for category in recipe.classify.all %}
+                                    <small class="text-muted" style="float: left;">{{ category.name }}</small>
+                                {% endfor %}
+                            </div>
+                            <div class="m-t text-right" style="padding-top: 30px;padding-left: 1%;">
+                                <form method="post" action="{% url 'like_recipe' recipe.id %}"> 
+                                    {% csrf_token %} 
+                                    <button type="submit" class="btn {% if user in recipe.liked_tym.all %}btn-danger{% else %}btn-primary{% endif %}" style="height: 30px;width: 120px;padding-top: 7px;border: 1px solid #6751a4;"> 
+                                        {% if user in recipe.liked_tym.all %}Đã Thích{% else %}Yêu Thích{% endif %} 
+                                    </button> 
+                                </form>
+                                <form method="post" action="{% url 'report_food' recipe.id %}"> 
+                                    {% csrf_token %} 
+                                    <button type="submit" class="btn btn-outline-danger" style="height: 30px;width: 90px;padding-top: 7px;border: 1px solid #fe3b0b;">
+                                        Tố Cáo
+                                    </button> 
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+
+
+
+                
+                
+
+                {% comment %}  {% endcomment %}
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock vegetarian%}

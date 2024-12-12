@@ -1,0 +1,133 @@
+{% extends "appfood/base.html" %}
+{%load static%}
+{% block myfood%}
+<style>
+    #btn-edit , #btn-delete{
+        background: none;
+        border: none;
+        width:50px;
+        height:50px;
+        padding:0;
+    }
+    .post-block{
+        width: 820px;
+        border-radius: 5px;
+        background: white;
+        margin: auto;
+        margin-bottom: 20px;
+        padding: 20px !important;
+        transition: all 0.3s ease;
+    }
+    #title{
+        color:var(--blue);
+        font-size:14pt;
+        margin-top: 10px;
+    }
+    #date{
+        color: #757575;
+        font-size: 11pt;
+    }
+    .post-block:hover{
+        box-shadow: 0px 0px 15px 1px grey !important;
+        transform: scale(1.02);
+    }
+</style>
+<main>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link " aria-current="page">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Trang chủ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'postfood' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Thêm bài viết
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'notifications' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Thông báo
+                                {% if unread_notifications_count > 0 %}
+                                    <span class="badge badge-danger">{{ unread_notifications_count }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'myfood' %}" class="nav-link active">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Quản lý bài viết
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'savefood' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Bài viết đã lưu
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'list_user' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Người dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% comment %} Tìm Kiếm {% endcomment %}
+                <form class="d-flex"  method=POST action="{% url 'search_title' %}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm món ăn....." name='searched' aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+                </form>
+
+                <a style="margin-left:20px" class="navbar-brand user_name" href="{%url 'page_user'%}"> {{user.last_name}} {{user.first_name}}
+                {% if user_profile.profile_image %}
+                    <img src="{{ user_profile.profile_image.url }}" alt="Profile Image">
+                {% else %}
+                    <img src="{% static 'img/user.png' %}" alt="Default Profile Image">
+                {% endif %}</a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="row">
+           {% for recipe in recipes %}
+
+        <div class="col-md-10">
+            <div class="row p-2 bg-white border post-block" style="width: 850px;float: right;">
+                {% if recipe.images.first %}
+                <div class="col-md-3 mt-1">
+                    <img class="img-fluid img-responsive product-image" style="width: 200px;height: 150px; object-fit: cover;" src="{{ recipe.images.first.image.url }}">
+                </div>
+                {% endif %}
+                <div class="col-md-8 mt">
+                    <h4 id="title">{{recipe.title}}</h4>
+                    <h5 id="date" class="text-justify text-truncate para mb-0">Ngày Đăng : {{recipe.images.first.uploaded_at|date:"d/m/Y"}}</h5>
+                </div>
+                <div class="align-items-center align-content-center col-md-1 border-left mt-1">
+                    <div class="d-flex flex-column">
+                        <a href="{% url 'edit_recipe' recipe.id %}" id="btn-edit" class="btn btn-sm" type="button">
+                            <img src="{% static 'img/editt.png' %}" alt="">
+                        </a>
+                        <br>
+                        <a href="{% url 'delete_recipe' recipe.id %}" id="btn-delete" class="btn">
+                            <img src="{% static 'img/deletee.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if recipes.count == 0 %}
+    <p>Bạn chưa đăng công thức nào.</p>
+        {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock myfood%}

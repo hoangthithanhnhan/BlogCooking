@@ -1,0 +1,125 @@
+{% extends "appfood/base.html" %}
+{%load static%}
+
+{% block postfood%}
+
+<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<link rel="stylesheet" href="{%static 'css/postpage.css' %}">
+<link rel="stylesheet" href="{%static 'css/newpost.css' %}">
+<link rel="stylesheet" href="{%static 'css/main.css' %}">
+<main>
+     <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link " aria-current="page">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Trang chủ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'postfood' %}" class="nav-link active">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Thêm bài viết
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'notifications' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Thông báo
+                                {% if unread_notifications_count > 0 %}
+                                    <span class="badge badge-danger">{{ unread_notifications_count }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'myfood' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Quản lý bài viết
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'savefood' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Bài viết đã lưu
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'list_user' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Người dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="nav-link">
+                                <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% comment %} Tìm Kiếm {% endcomment %}
+                <form class="d-flex"  method=POST action="{% url 'search_title' %}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm món ăn....." name='searched' aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+                </form>
+
+                <a style="margin-left:20px" class="navbar-brand user_name" href="{%url 'page_user'%}"> {{user.last_name}} {{user.first_name}}
+                {% if user_profile.profile_image %}
+                    <img src="{{ user_profile.profile_image.url }}" alt="Profile Image">
+                {% else %}
+                    <img src="{% static 'img/user.png' %}" alt="Default Profile Image">
+                {% endif %}</a>
+            </div>
+        </nav>
+    </header>
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+    {% csrf_token %}
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+                {% endif %}
+                <h3 class="card-title text-center mb-4">THÊM BÀI VIẾT MỚI</h3>
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Tiêu đề</label>
+                    <input type="text" id="title" name="title" class="form-control" placeholder="Nhập tiêu đề bài viết" required>
+                </div>
+                <div class="mb-3">
+                        <label for="classify" style="font-weight:700; color:var(--blue); font-size:13pt;">Danh mục</label><br>
+                        <label><input type="radio" id="snacks" name="classify" value="Món Ăn Vặt"> Món Ăn Vặt</label><br>
+                        <label><input type="radio" id="vegetarian" name="classify" value="Chay"> Chay</label><br>
+                        <label><input type="radio" id="asian" name="classify" value="Món Á"> Món Á</label><br>
+                        <label><input type="radio" id="european" name="classify" value="Món Âu"> Món Âu</label><br>
+                        <label><input type="radio" id="grill" name="classify" value="Nướng"> Nướng</label><br>
+                        <label><input type="radio" id="appetizer" name="classify" value="Khai Vị"> Khai Vị</label><br>
+                        <label><input type="radio" id="dessert" name="classify" value="Tráng Miện"> Tráng Miện</label>
+                    <!-- Thêm các tùy chọn khác -->
+                </div>
+                <div class="mb-3">
+                    <label for="introduce" class="form-label">Giới thiệu</label>
+                    <input id="introduce" name="introduce" class="form-control" placeholder="Nhập giới thiệu tóm tắt bài viết" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Nội dung</label>
+                    <textarea id="description" name="description" class="form-control" rows="3" placeholder="Nhập mô tả chế biến" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="images" class="form-label">Ảnh minh họa</label>
+                    <input class="form-control" type="file" id="images" name="images" multiple required>
+                </div>
+
+                <button type="submit" class="btn btn-post w-100">Đăng</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</main>
+{% endblock postfood%}

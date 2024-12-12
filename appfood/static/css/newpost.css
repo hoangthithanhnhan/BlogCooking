@@ -1,0 +1,32 @@
+main form .container .card .card-body .mb-3 .form-control{
+    background: #eeeeee;
+    border-radius: 6px;
+    border: solid 0.5px grey;
+}
+main form .container .card .card-body .mb-3 .form-label{
+    font-weight:700;
+    color:var(--blue);
+    font-size:13pt;
+}
+main form .container .card .card-body .card-title{
+    color:var(--red);
+    font-weight:700;
+}
+main form .container .card {
+    background: white;
+    width: 900px;
+    margin: auto;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 14px 3px grey !important;
+}
+main form .container .card .card-body button.btn-post{
+    background: var(--red);
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 13pt;
+    color:white;
+    box-shadow: 0px 1px 2px 0px grey;
+}
