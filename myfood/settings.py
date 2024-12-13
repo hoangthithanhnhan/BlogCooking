@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-o$$y@b%k549aor5heuq%cp*cpln046fi5xvyo_whx$duz64-v@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*',
+]
 
 
 # Application definition
@@ -130,3 +132,7 @@ MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 
 LOGIN_URL = '/login/'
+# chạy chuwcs năng trên server
+CSRF_TRUSTED_ORIGINS = [
+    'https://3199-171-251-25-150.ngrok-free.app'
+]
