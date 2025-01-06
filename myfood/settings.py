@@ -134,5 +134,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 LOGIN_URL = '/login/'
 # chạy chuwcs năng trên server
 CSRF_TRUSTED_ORIGINS = [
-    'https://3199-171-251-25-150.ngrok-free.app'
+    'https://4341-203-205-51-206.ngrok-free.app'
 ]

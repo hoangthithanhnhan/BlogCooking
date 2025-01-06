@@ -28,11 +28,10 @@ class Classify(models.Model):
     name = models.CharField(max_length=100) 
     def __str__(self): return self.name
 
-
 class Recipe(models.Model):
     title = models.CharField(max_length=100,null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    introduce =  models.CharField(max_length=100,null=True)
+    introduce = models.CharField(max_length=100,null=True)
     description = models.CharField(max_length=200,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     views = models.IntegerField(default=0)

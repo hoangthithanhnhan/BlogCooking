@@ -37,15 +37,15 @@
             <div class="row d-flex flex-wrap">
                 {% for recipe in recipes %}
             <div class="col-md-4" style="margin-bottom: 25px;">
-                            <div class="card">
-                                <div class="ibox-content product-box">
+                            <div class="card" >
+                                <div class="ibox-content product-box" style="height: 520px;">
                                     {% if recipe.images.first %}
                                     <div class="product" style="height: 170px;">
                                         <img style="height:200px;width: 100%;border-radius: 10px 10px 0px 0px;object-fit:cover;" src="{{ recipe.images.first.image.url }}" alt="">
                                     </div>
                                     {% endif %}
                                     <div class="product-desc" style="padding: 15px;margin-top: 20px;">
-                                        <a href="{% url 'detail_admin' recipe.id %}" class="product-name">{{ recipe.title }}</a>
+                                        <a href="{% url 'detail' recipe.id %}" class="product-name">{{ recipe.title }}</a>
                                             <div style="    margin-bottom: -20px;">
                                                 <small style="float: left;" class="text-muted"></small>
                                                 {% for category in recipe.classify.all %}

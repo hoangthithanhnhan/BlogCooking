@@ -88,7 +88,7 @@ def register(request):
 
 @login_required
 def home(request):
-    # Lấy tất cả sản phẩm và thêm các mối quan hệ liên quan để tối ưu hóa truy vấn
+    # Lấy tất cả sảnphẩm và thêm các mối quan hệ liên quan để tối ưu hóa truy vấn
     recipes = Recipe.objects.all().select_related('author', 'author__userprofile').prefetch_related('images',
                                                                                                     'classify')
     # Lấy 5 sản phẩm có lượt xem cao nhất

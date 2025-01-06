@@ -56,6 +56,8 @@
                     <div class="text-muted"><img style="width:15px;height:15px; margin-bottom:4px;" src="{% static 'img/user.png' %}" alt=""> <b style="color:var(--blue);">{{ author_profile.user.last_name }} {{ author_profile.user.first_name }} </b></div>
                     <div style="color: #6c757d;"><img style="width:15px;height:15px; margin-bottom:4px;" src="{% static 'img/calendar.png' %}" alt=""> {{ recipe.created_at|date:"d/m/Y" }}</div>
                     <div style="color: #6c757d;" class="review-no"><img style="width:15px;height:15px; margin-bottom:4px;" src="{% static 'img/eye.png' %}" alt=""> {{ recipe.views }} lượt xem</div>
+                    <small class="text-muted"><img style="width:17px;height:17px; margin-bottom:4px;" src="{% static 'img/heart.png' %}" alt=""> {{ recipe.total_likes }} yêu thích</small>
+
 					<div class="action" style="margin-bottom:10px;margin-top:10px;">
                         <div class="m-t text-right block-button" style="padding-top: 30px;">
                             <a href="{% url 'like_recipe' recipe.id %}" class="add-to-cart btn btn-default" type="button" style="background:none; padding:0px;"><img style="width:30px;height:30px; margin-bottom:4px; margin-right:10px;" src="{% static 'img/heartttt.png' %}" alt=""></a>
